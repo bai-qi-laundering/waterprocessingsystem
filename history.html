@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#126b82">
+  <title>歷史紀錄｜百麒水處理</title>
+  <link rel="stylesheet" href="app.css">
+  <script src="config.js"></script>
+  <script src="transport.js"></script>
+  <script src="history-core.js"></script>
+  <script src="history.js" defer></script>
+</head>
+<body style="margin:0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif">
+<main class="history-shell">
+  <nav class="top-nav"><a href="index.html">← 返回巡檢</a><span>百麒 · 水處理</span></nav>
+  <header class="history-heading"><h1>歷史紀錄</h1><p>每日四時段，一起確認每一次巡檢。</p></header>
+  <section class="summary-grid" aria-label="巡檢警示">
+    <div class="summary-card alert"><span>異常通報</span><strong id="abnormalCount">—</strong><small>全部紀錄 · 筆</small></div>
+    <div class="summary-card"><span>本週遺漏時段</span><strong id="missingCount">—</strong><small>已過截止時間 · 次</small></div>
+    <div class="summary-card alert"><span>需補 P 水警示</span><strong id="pWaterCount">—</strong><small>全部紀錄 · 筆</small></div>
+  </section>
+  <p id="weekRange" class="history-message">本週以週一至今日計算，尚未到期的時段不計入遺漏。</p>
+  <div id="connectionStatus" class="connection-status" role="status">正在連接巡檢資料…</div>
+  <div class="history-filters">
+    <label>日期<input type="date" id="filterDate"></label>
+    <label>時段<select id="filterShift"><option value="ALL">全部時段</option><option value="06:00">06:00</option><option value="12:00">12:00</option><option value="17:00">17:00</option><option value="收尾">收尾</option></select></label>
+    <label>紀錄<select id="filterStatus"><option value="ALL">全部紀錄</option><option value="ISSUE">異常 / 需補 P 水</option><option value="VALVE">逆止閥清潔</option><option value="REFILLED">已補 P 水</option></select></label>
+    <button type="button" id="clearFilters">清除篩選</button>
+    <button type="button" id="refreshHistory">重新整理</button>
+  </div>
+  <div id="recordsContainer" aria-live="polite"><div class="empty-state">正在讀取巡檢紀錄…</div></div>
+  <button id="loadMore" type="button" class="load-more" hidden>載入更早紀錄</button>
+  <p class="history-message">勾選表示已有巡檢紀錄；展開時段可查看明細。縮圖在展開後才載入，不增加照片、影片的上傳步驟。</p>
+</main>
+<dialog id="mediaDialog" class="media-dialog" aria-label="照片與影片預覽">
+  <div class="dialog-actions"><a id="originalMedia" target="_blank" rel="noopener noreferrer">在 Google Drive 開啟 ↗</a><button id="closeMedia" type="button">關閉 ✕</button></div>
+  <div id="mediaContent"></div>
+</dialog>
+</body>
+</html>

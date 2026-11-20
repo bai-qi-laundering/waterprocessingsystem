@@ -1,0 +1,1603 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>百麒國際股份有限公司 - 水處理巡檢系統</title>
+  <style>
+    :root {
+      --bg-water: #F0F8FF;
+      --bg-gradient: linear-gradient(160deg, #E0F4FF 0%, #F4FBFF 50%, #E6F7FF 100%);
+      --card-bg: #FFFFFF;
+      --aqua-primary: #0284C7;
+      --aqua-light: #38BDF8;
+      --aqua-soft: #E0F2FE;
+      --teal-ok: #0D9488;
+      --teal-soft: #CCFBF1;
+      --coral-danger: #B91C1C;
+      --coral-soft: #FEF2F2;
+      --amber-warn: #D97706;
+      --amber-soft: #FEF3C7;
+      --text-main: #0F172A;
+      --text-sub: #475569;
+      --border-color: #BAE6FD;
+    }
+
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    }
+
+    body {
+      margin: 0;
+      padding: 16px;
+      background: var(--bg-gradient);
+      background-attachment: fixed;
+      color: var(--text-main);
+      line-height: 1.5;
+    }
+
+    .container {
+      max-width: 540px;
+      margin: 0 auto;
+      padding-bottom: 48px;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 18px;
+      padding: 18px 16px;
+      background: linear-gradient(135deg, #0284C7 0%, #06B6D4 100%);
+      color: #FFFFFF;
+      border-radius: 18px;
+      box-shadow: 0 8px 20px rgba(2, 132, 199, 0.22);
+    }
+
+    header h1 {
+      font-size: 1.35rem;
+      margin: 0 0 4px 0;
+      letter-spacing: 1px;
+      font-weight: 800;
+    }
+
+    header p {
+      margin: 0;
+      font-size: 0.88rem;
+      opacity: 0.92;
+    }
+
+    .card {
+      background-color: var(--card-bg);
+      border-radius: 16px;
+      padding: 18px;
+      margin-bottom: 16px;
+      border: 1px solid var(--border-color);
+      box-shadow: 0 4px 15px rgba(2, 132, 199, 0.06);
+    }
+
+    .section-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      margin: 0 0 14px 0;
+      color: var(--aqua-primary);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      flex-wrap: wrap;
+      border-bottom: 2px solid var(--aqua-soft);
+      padding-bottom: 8px;
+    }
+
+    .auto-shift-banner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--aqua-soft);
+      border: 1.5px solid #7DD3FC;
+      border-radius: 12px;
+      padding: 12px 16px;
+      margin-bottom: 0;
+    }
+
+    .shift-info-left {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .shift-label-small {
+      font-size: 0.78rem;
+      color: var(--text-sub);
+      font-weight: 600;
+    }
+
+    .shift-value-large {
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: var(--aqua-primary);
+    }
+
+    .shift-status-pill {
+      padding: 6px 12px;
+      border-radius: 999px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      background-color: var(--teal-soft);
+      color: var(--teal-ok);
+    }
+
+    .shift-status-pill.warn {
+      background-color: var(--amber-soft);
+      color: var(--amber-warn);
+    }
+
+    .shift-status-pill.danger {
+      background-color: var(--coral-soft);
+      color: var(--coral-danger);
+    }
+
+    .input-group {
+      margin-bottom: 14px;
+    }
+
+    .input-group:last-child {
+      margin-bottom: 0;
+    }
+
+    .input-group label {
+      display: block;
+      font-size: 0.92rem;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: var(--text-main);
+    }
+
+    input[type="text"],
+    input[type="number"],
+    textarea,
+    select {
+      width: 100%;
+      padding: 12px 14px;
+      background-color: #F8FAFC;
+      border: 1.5px solid #CBD5E1;
+      border-radius: 10px;
+      color: var(--text-main);
+      font-size: 1rem;
+      transition: all 0.2s;
+    }
+
+    input:focus, textarea:focus, select:focus {
+      outline: none;
+      border-color: var(--aqua-primary);
+      background-color: #FFFFFF;
+      box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15);
+    }
+
+    .check-item {
+      padding: 14px 0;
+      border-bottom: 1px dashed #E2E8F0;
+    }
+
+    .check-item:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+
+    .check-title {
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 4px;
+      color: var(--text-main);
+    }
+
+    .check-desc {
+      font-size: 0.82rem;
+      color: var(--text-sub);
+      margin-bottom: 10px;
+    }
+
+    .check-boxes {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .box-option {
+      display: block;
+      width: 100%;
+      margin: 0;
+    }
+
+    .box-input {
+      display: none;
+    }
+
+    .box-label {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 11px 10px;
+      background-color: #F8FAFC;
+      border: 2px solid #E2E8F0;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: 700;
+      font-size: 0.95rem;
+      color: var(--text-sub);
+      transition: all 0.18s;
+      width: 100%;
+    }
+
+    .box-tick {
+      width: 22px;
+      height: 22px;
+      border: 2px solid #94A3B8;
+      border-radius: 6px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      color: transparent;
+      background-color: #FFFFFF;
+    }
+
+    .box-input.normal:checked + .box-label {
+      border-color: var(--teal-ok);
+      background-color: var(--teal-soft);
+      color: #0F766E;
+    }
+    .box-input.normal:checked + .box-label .box-tick {
+      background-color: var(--teal-ok);
+      border-color: var(--teal-ok);
+      color: #FFFFFF;
+    }
+
+    .box-input.abnormal:checked + .box-label {
+      border-color: var(--coral-danger);
+      background-color: var(--coral-soft);
+      color: var(--coral-danger);
+    }
+    .box-input.abnormal:checked + .box-label .box-tick {
+      background-color: var(--coral-danger);
+      border-color: var(--coral-danger);
+      color: #FFFFFF;
+    }
+
+    .refill-check-wrap {
+      margin-top: 14px;
+      margin-bottom: 12px;
+    }
+
+    .refill-check-input {
+      display: none;
+    }
+
+    .refill-check-label {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 13px 14px;
+      background-color: #F8FAFC;
+      border: 2px solid #CBD5E1;
+      border-radius: 12px;
+      cursor: pointer;
+      font-weight: 700;
+      font-size: 0.96rem;
+      color: var(--text-sub);
+      transition: all 0.2s;
+      user-select: none;
+    }
+
+    .refill-check-input:checked + .refill-check-label {
+      border-color: var(--teal-ok);
+      background-color: var(--teal-soft);
+      color: #0F766E;
+      box-shadow: 0 3px 10px rgba(13, 148, 136, 0.18);
+    }
+
+    .refill-check-input:checked + .refill-check-label .box-tick {
+      background-color: var(--teal-ok);
+      border-color: var(--teal-ok);
+      color: #FFFFFF;
+    }
+
+    .photo-upload-box {
+      display: block;
+      width: 100%;
+      border: 2px dashed #7DD3FC;
+      border-radius: 12px;
+      padding: 16px;
+      text-align: center;
+      background-color: #F0F9FF;
+      cursor: pointer;
+      transition: all 0.2s;
+      margin-top: 10px;
+    }
+
+    .photo-upload-box:hover {
+      background-color: #E0F2FE;
+    }
+
+    .photo-upload-box.required-alert {
+      border-color: var(--coral-danger);
+      background-color: #FEF2F2;
+    }
+
+    .photo-upload-box input[type="file"] {
+      display: none;
+    }
+
+    .upload-btn-text {
+      font-size: 0.95rem;
+      color: var(--aqua-primary);
+      font-weight: 700;
+      display: block;
+    }
+
+    .photo-upload-box.required-alert .upload-btn-text {
+      color: var(--coral-danger);
+    }
+
+    .preview-img {
+      max-width: 100%;
+      max-height: 220px;
+      border-radius: 10px;
+      margin-top: 10px;
+      display: none;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+    }
+
+    .multi-media-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .media-thumb-card {
+      position: relative;
+      background: #FFFFFF;
+      border: 1.5px solid #BAE6FD;
+      border-radius: 10px;
+      padding: 4px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    }
+
+    .media-thumb-card img,
+    .media-thumb-card video {
+      width: 100%;
+      height: 92px;
+      object-fit: cover;
+      border-radius: 7px;
+      display: block;
+      background: #0F172A;
+    }
+
+    .media-type-badge {
+      position: absolute;
+      bottom: 8px;
+      left: 8px;
+      background: rgba(15, 23, 42, 0.78);
+      color: #FFFFFF;
+      font-size: 0.68rem;
+      font-weight: 700;
+      padding: 2px 6px;
+      border-radius: 5px;
+    }
+
+    .media-remove-btn {
+      position: absolute;
+      top: -6px;
+      right: -6px;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: var(--coral-danger);
+      color: #FFFFFF;
+      border: 2px solid #FFFFFF;
+      font-size: 12px;
+      font-weight: 800;
+      line-height: 1;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.25);
+    }
+
+    .level-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin-bottom: 6px;
+    }
+
+    .level-btn {
+      padding: 12px 6px;
+      border-radius: 12px;
+      background-color: var(--aqua-soft);
+      border: 2px solid #7DD3FC;
+      color: var(--aqua-primary);
+      font-weight: 800;
+      font-size: 1.05rem;
+      cursor: pointer;
+      user-select: none;
+      text-align: center;
+      transition: all 0.18s;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2px;
+    }
+
+    .level-btn .sub-tag {
+      font-size: 0.72rem;
+      font-weight: 700;
+      opacity: 0.88;
+    }
+
+    .level-btn.low-btn {
+      background-color: #FEF2F2;
+      border-color: #FCA5A5;
+      color: var(--coral-danger);
+    }
+
+    .level-btn.selected-normal {
+      background-color: var(--aqua-primary);
+      border-color: var(--aqua-primary);
+      color: #FFFFFF;
+      box-shadow: 0 4px 12px rgba(2, 132, 199, 0.35);
+      transform: translateY(-1px);
+    }
+
+    .level-btn.low-btn.selected-low {
+      background-color: var(--coral-danger);
+      border-color: var(--coral-danger);
+      color: #FFFFFF;
+      box-shadow: 0 4px 12px rgba(225, 29, 72, 0.35);
+      transform: translateY(-1px);
+    }
+
+    .pwater-alert {
+      display: none;
+      margin-top: 12px;
+      margin-bottom: 12px;
+      padding: 14px 16px;
+      border-radius: 12px;
+      background-color: var(--coral-soft);
+      border: 2px solid var(--coral-danger);
+      color: var(--coral-danger);
+      font-weight: 800;
+      font-size: 1.02rem;
+      text-align: center;
+      line-height: 1.5;
+      animation: pulseAlert 1.5s infinite;
+    }
+
+    @keyframes pulseAlert {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.02); }
+      100% { transform: scale(1); }
+    }
+
+    .manual-valve-btn-wrap {
+      display: block;
+      margin-bottom: 16px;
+    }
+
+    .manual-valve-btn {
+      width: 100%;
+      padding: 15px 16px;
+      border-radius: 14px;
+      border: 2px dashed #0284C7;
+      background-color: #FFFFFF;
+      color: var(--aqua-primary);
+      font-size: 1rem;
+      font-weight: 800;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      box-shadow: 0 4px 12px rgba(2, 132, 199, 0.12);
+      transition: all 0.2s;
+    }
+
+    .manual-valve-btn:active {
+      transform: scale(0.99);
+      background-color: var(--aqua-soft);
+    }
+
+    .valve-card {
+      display: none;
+      border: 2.5px solid #0284C7;
+      background: linear-gradient(180deg, #FFFFFF 0%, #F0F9FF 100%);
+      position: relative;
+    }
+
+    .cancel-manual-valve-btn {
+      padding: 5px 11px;
+      border-radius: 8px;
+      border: 1.5px solid #94A3B8;
+      background-color: #F1F5F9;
+      color: #475569;
+      font-size: 0.8rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .valve-lock-notice {
+      background-color: #FEF2F2;
+      border: 1.5px solid #FCA5A5;
+      color: var(--coral-danger);
+      font-size: 0.85rem;
+      font-weight: 700;
+      padding: 10px 12px;
+      border-radius: 10px;
+      margin-bottom: 12px;
+    }
+
+    .valve-slot-card {
+      background-color: #FFFFFF;
+      border: 1.5px solid #BAE6FD;
+      border-radius: 12px;
+      padding: 12px;
+      margin-bottom: 12px;
+    }
+
+    .valve-slot-card.missing-slot {
+      border-color: var(--coral-danger);
+      background-color: #FFF9FA;
+    }
+
+    .valve-slot-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+      font-weight: 700;
+      font-size: 0.92rem;
+      color: var(--aqua-primary);
+    }
+
+    .valve-slot-card.missing-slot .valve-slot-header {
+      color: var(--coral-danger);
+    }
+
+    .valve-sub-title {
+      font-size: 0.98rem;
+      font-weight: 800;
+      color: var(--aqua-primary);
+      margin: 14px 0 8px 0;
+    }
+
+    .sig-wrapper {
+      border: 2px solid #94A3B8;
+      border-radius: 12px;
+      background-color: #FFFFFF;
+      overflow: hidden;
+      position: relative;
+    }
+
+    #signatureCanvas {
+      width: 100%;
+      height: 170px;
+      display: block;
+      touch-action: none;
+      cursor: crosshair;
+    }
+
+    .sig-actions {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 8px;
+    }
+
+    .clear-sig-btn {
+      padding: 7px 14px;
+      border-radius: 8px;
+      border: 1px solid #CBD5E1;
+      background-color: #F1F5F9;
+      color: var(--text-sub);
+      font-weight: 600;
+      font-size: 0.85rem;
+      cursor: pointer;
+    }
+
+    #abnormalSection {
+      display: none;
+      border: 2px solid var(--coral-danger);
+      background-color: #FFF5F5;
+    }
+
+    .submit-btn {
+      width: 100%;
+      padding: 16px;
+      background: linear-gradient(135deg, #0284C7 0%, #0D9488 100%);
+      color: #FFFFFF;
+      border: none;
+      border-radius: 14px;
+      font-size: 1.1rem;
+      font-weight: 800;
+      cursor: pointer;
+      letter-spacing: 1px;
+      box-shadow: 0 6px 16px rgba(2, 132, 199, 0.3);
+    }
+
+    .submit-btn:disabled {
+      opacity: 0.55;
+      cursor: not-allowed;
+    }
+
+    .status-msg {
+      margin-top: 14px;
+      padding: 14px;
+      border-radius: 12px;
+      text-align: center;
+      display: none;
+      font-weight: 700;
+    }
+
+    .status-msg.success {
+      display: block;
+      background-color: var(--teal-soft);
+      color: #0F766E;
+      border: 1px solid #5EEAD4;
+    }
+
+    .status-msg.error {
+      display: block;
+      background-color: var(--coral-soft);
+      color: var(--coral-danger);
+      border: 1px solid #FCA5A5;
+    }
+  </style>
+<link rel="stylesheet" href="app.css">
+<script src="config.js"></script><script src="transport.js"></script><script src="history-core.js"></script><script src="inspection.js" defer></script>
+</head>
+<body>
+
+<div class="container">
+  <nav class="top-nav"><span>百麒 · 水處理</span><a href="history.html">歷史紀錄 ↗</a></nav>
+<section class="last-inspection" aria-live="polite"><span>上次巡檢時間</span><strong id="lastInspectionTime">讀取中…</strong><button type="button" onclick="refreshLastInspection()">重新整理</button></section>
+<div id="connectionStatus" class="connection-status" role="status">正在連接巡檢資料…</div><header>
+    <h1>💧 百麒國際股份有限公司</h1>
+    <p>水處理設備每日四時段巡檢系統</p>
+  </header>
+
+  <form id="inspectionForm" onsubmit="handleSubmit(event)">
+    <!-- 1. 自動分配時段 -->
+    <div class="card">
+      <div class="section-title">
+        <span>1. 巡檢時段（系統自動分配）</span>
+        <span id="currentDateTime" style="font-size: 0.82rem; color: var(--text-sub); font-weight: 600;"></span>
+      </div>
+
+      <div class="auto-shift-banner">
+        <div class="shift-info-left">
+          <span class="shift-label-small">系統自動判定時段（不可手動更改）</span>
+          <span class="shift-value-large" id="autoShiftDisplay">計算中...</span>
+        </div>
+        <span id="shiftStatusPill" class="shift-status-pill">判定中</span>
+      </div>
+    </div>
+
+    <!-- 2. 設備狀態打勾檢查 (4項) -->
+    <div class="card">
+      <div class="section-title">2. 設備狀態檢查（請打勾）</div>
+
+      <!-- ① 是否有異音 -->
+      <div class="check-item">
+        <div class="check-title">① 是否有異音</div>
+        <div class="check-desc">檢查加藥劑馬達是否很大聲或運轉異常</div>
+        <div class="check-boxes">
+          <label class="box-option">
+            <input type="radio" name="noiseCheck" value="正常(無異音)" class="box-input normal" onchange="checkAbnormalState()" required>
+            <div class="box-label"><span class="box-tick">✓</span> 正常</div>
+          </label>
+          <label class="box-option">
+            <input type="radio" name="noiseCheck" value="異常(有異音)" class="box-input abnormal" onchange="checkAbnormalState()">
+            <div class="box-label"><span class="box-tick">!</span> 有異音</div>
+          </label>
+        </div>
+      </div>
+
+      <!-- ② 是否有漏水 -->
+      <div class="check-item">
+        <div class="check-title">② 是否有漏水</div>
+        <div class="check-desc">檢查管線、接頭及桶槽周邊是否有滲漏水跡象</div>
+        <div class="check-boxes">
+          <label class="box-option">
+            <input type="radio" name="leakCheck" value="正常(無漏水)" class="box-input normal" onchange="checkAbnormalState()" required>
+            <div class="box-label"><span class="box-tick">✓</span> 正常</div>
+          </label>
+          <label class="box-option">
+            <input type="radio" name="leakCheck" value="異常(有漏水)" class="box-input abnormal" onchange="checkAbnormalState()">
+            <div class="box-label"><span class="box-tick">!</span> 有漏水</div>
+          </label>
+        </div>
+      </div>
+
+      <!-- ③ 加藥管是否異常膨脹 -->
+      <div class="check-item">
+        <div class="check-title">③ 加藥管是否異常膨脹</div>
+        <div class="check-desc">檢查加藥管路有無變形、鼓起或壓力異常膨脹</div>
+        <div class="check-boxes">
+          <label class="box-option">
+            <input type="radio" name="pipeCheck" value="正常(無膨脹)" class="box-input normal" onchange="checkAbnormalState()" required>
+            <div class="box-label"><span class="box-tick">✓</span> 正常</div>
+          </label>
+          <label class="box-option">
+            <input type="radio" name="pipeCheck" value="異常(管路膨脹)" class="box-input abnormal" onchange="checkAbnormalState()">
+            <div class="box-label"><span class="box-tick">!</span> 異常膨脹</div>
+          </label>
+        </div>
+      </div>
+
+      <!-- ④ 桶內水位是否正常消耗 -->
+      <div class="check-item">
+        <div class="check-title">④ 桶內水位是否正常消耗</div>
+        <div class="check-desc">注意水位有無突然變超級少、或異常變多</div>
+        <div class="check-boxes">
+          <label class="box-option">
+            <input type="radio" name="waterLevelCheck" value="正常消耗" class="box-input normal" onchange="checkAbnormalState()" required>
+            <div class="box-label"><span class="box-tick">✓</span> 正常消耗</div>
+          </label>
+          <label class="box-option">
+            <input type="radio" name="waterLevelCheck" value="異常(突減或變多)" class="box-input abnormal" onchange="checkAbnormalState()">
+            <div class="box-label"><span class="box-tick">!</span> 水位異常</div>
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <!-- 異常強制拍照區 -->
+    <div id="abnormalSection" class="card">
+      <div class="section-title" style="color: var(--coral-danger); border-bottom-color: #FECACA;">
+        <span>⚠️ 發現異常項目 - 請務必拍照與說明</span>
+      </div>
+      <div class="input-group">
+        <label for="notes">異常狀況補充說明 *</label>
+        <textarea id="notes" rows="2" placeholder="請簡述異常位置或狀況（例如：馬達大聲、水位突然降到底）"></textarea>
+      </div>
+      <label class="photo-upload-box required-alert">
+        <input type="file" id="abnormalPhotoInput" accept="image/*" capture="environment" onchange="handleImageSelect(event, 'abnormalPreview', 'abnormal')">
+        <span class="upload-btn-text" id="abnormalUploadText">📷 點擊拍攝【異常部位照片】(必填)</span>
+        <img id="abnormalPreview" class="preview-img" alt="異常照片預覽">
+      </label>
+    </div>
+
+    <!-- 3. 加藥劑流數 ＆ 藥劑剩餘量紀錄 ＆ 是否補P水 -->
+    <div class="card">
+      <div class="section-title">3. 加藥劑流數與剩餘量檢查</div>
+
+      <div class="input-group">
+        <label for="chemicalFlowRate">💧 加藥劑流數 *</label>
+        <input type="text" id="chemicalFlowRate" placeholder="請輸入目前加藥劑流數" required>
+      </div>
+
+      <div class="input-group" style="margin-top: 16px;">
+        <label>🧪 目前剩餘量（請直接點選下方刻度）*</label>
+        <div class="level-grid">
+          <div class="level-btn" data-level="7" onclick="selectLevel(7)">
+            <span>7</span>
+            <span class="sub-tag">滿水標準</span>
+          </div>
+          <div class="level-btn" data-level="6" onclick="selectLevel(6)">
+            <span>6</span>
+            <span class="sub-tag">正常</span>
+          </div>
+          <div class="level-btn" data-level="5" onclick="selectLevel(5)">
+            <span>5</span>
+            <span class="sub-tag">正常</span>
+          </div>
+          <div class="level-btn" data-level="4" onclick="selectLevel(4)">
+            <span>4</span>
+            <span class="sub-tag">正常</span>
+          </div>
+          <div class="level-btn" data-level="3" onclick="selectLevel(3)">
+            <span>3</span>
+            <span class="sub-tag">偏低注意</span>
+          </div>
+          <div class="level-btn low-btn" data-level="2" onclick="selectLevel(2)">
+            <span>2</span>
+            <span class="sub-tag">需補P水</span>
+          </div>
+          <div class="level-btn low-btn" data-level="1" onclick="selectLevel(1)">
+            <span>1</span>
+            <span class="sub-tag">過低</span>
+          </div>
+        </div>
+        <input type="hidden" id="remainingAmount" value="">
+      </div>
+
+      <div id="pwaterAlertBox" class="pwater-alert">
+        🚨 警示：藥劑剩餘量已達 2（或更低），請立即補 P 水！+2桶P水 補水至7分
+      </div>
+
+      <div class="refill-check-wrap">
+        <label style="display:block; font-size:0.88rem; color:var(--text-sub); margin-bottom:6px; font-weight:600;">
+          ➕ 是否補 P 水（非必填，有補水才打勾）
+        </label>
+        <label style="display:block;">
+          <input type="checkbox" id="pWaterRefilledCheck" class="refill-check-input">
+          <div class="refill-check-label">
+            <span class="box-tick">✓</span>
+            <span>已補 P 水（已補至7分滿）</span>
+          </div>
+        </label>
+      </div>
+
+      <label class="photo-upload-box">
+        <input type="file" id="remainingPhotoInput" accept="image/*" capture="environment" onchange="handleImageSelect(event, 'remainingPreview', 'remaining')">
+        <span class="upload-btn-text" id="remainingUploadText">📷 點擊拍攝【藥劑桶剩餘量照片】(必填)</span>
+        <img id="remainingPreview" class="preview-img" alt="剩餘量照片預覽">
+      </label>
+    </div>
+
+    <!-- 4-A. 非強制時段顯示的手動臨時開啟按鍵 -->
+    <div id="manualValveBtnWrap" class="manual-valve-btn-wrap">
+      <button type="button" class="manual-valve-btn" onclick="openValveCardManually()">
+        🧽 手動臨時加入：加藥器逆止閥清潔（照片 / 影片）
+      </button>
+    </div>
+
+    <!-- 4-B. 加藥器逆止閥清潔卡片（清潔日收尾時段自動跳出，或點擊上方手動按鍵臨時加入） -->
+    <div class="card valve-card" id="valveSectionCard">
+      <div class="section-title">
+        <span>4. 加藥器逆止閥清潔（照片 / 影片不限數量）</span>
+        <div style="display:flex; align-items:center; gap:6px;">
+          <span id="valveDueBadge" class="shift-status-pill danger">🔒 強制紀錄鎖定中</span>
+          <button type="button" id="cancelManualValveBtn" class="cancel-manual-valve-btn" onclick="cancelManualValveCard()" style="display:none;">取消關閉</button>
+        </div>
+      </div>
+
+      <div class="valve-lock-notice" id="valveLockNotice">
+        ⚠️ 此清潔卡片已啟動！每個項目至少需上傳 1 個檔案（支援照片或影片，可連續多選或不限數量追加），完成後才可儲存或離開畫面。
+      </div>
+
+      <div id="valvePhotoContainer">
+        <!-- 逆止閥 (一) -->
+        <div class="valve-sub-title">🔹 逆止閥 (一)</div>
+
+        <div class="valve-slot-card missing-slot" id="slotCard_v1Before">
+          <div class="valve-slot-header">
+            <span>① 逆止閥 1【清潔前】*</span>
+            <span id="countBadge_v1Before" style="font-size:0.8rem;">尚未上傳 (0)</span>
+          </div>
+          <label class="photo-upload-box" style="margin-top:0; padding:12px;">
+            <input type="file" accept="image/*,video/*" multiple onchange="handleMultiMediaSelect(event, 'v1Before')">
+            <span class="upload-btn-text" style="font-size:0.9rem;">📷 / 🎥 點擊拍攝或選擇【照片 / 影片】（不限數量）</span>
+          </label>
+          <div class="multi-media-grid" id="grid_v1Before"></div>
+        </div>
+
+        <div class="valve-slot-card missing-slot" id="slotCard_v1After">
+          <div class="valve-slot-header">
+            <span>② 逆止閥 1【清潔後】*</span>
+            <span id="countBadge_v1After" style="font-size:0.8rem;">尚未上傳 (0)</span>
+          </div>
+          <label class="photo-upload-box" style="margin-top:0; padding:12px;">
+            <input type="file" accept="image/*,video/*" multiple onchange="handleMultiMediaSelect(event, 'v1After')">
+            <span class="upload-btn-text" style="font-size:0.9rem;">📷 / 🎥 點擊拍攝或選擇【照片 / 影片】（不限數量）</span>
+          </label>
+          <div class="multi-media-grid" id="grid_v1After"></div>
+        </div>
+
+        <!-- 逆止閥 (二) -->
+        <div class="valve-sub-title">🔹 逆止閥 (二)</div>
+
+        <div class="valve-slot-card missing-slot" id="slotCard_v2Before">
+          <div class="valve-slot-header">
+            <span>③ 逆止閥 2【清潔前】*</span>
+            <span id="countBadge_v2Before" style="font-size:0.8rem;">尚未上傳 (0)</span>
+          </div>
+          <label class="photo-upload-box" style="margin-top:0; padding:12px;">
+            <input type="file" accept="image/*,video/*" multiple onchange="handleMultiMediaSelect(event, 'v2Before')">
+            <span class="upload-btn-text" style="font-size:0.9rem;">📷 / 🎥 點擊拍攝或選擇【照片 / 影片】（不限數量）</span>
+          </label>
+          <div class="multi-media-grid" id="grid_v2Before"></div>
+        </div>
+
+        <div class="valve-slot-card missing-slot" id="slotCard_v2After">
+          <div class="valve-slot-header">
+            <span>④ 逆止閥 2【清潔後】*</span>
+            <span id="countBadge_v2After" style="font-size:0.8rem;">尚未上傳 (0)</span>
+          </div>
+          <label class="photo-upload-box" style="margin-top:0; padding:12px;">
+            <input type="file" accept="image/*,video/*" multiple onchange="handleMultiMediaSelect(event, 'v2After')">
+            <span class="upload-btn-text" style="font-size:0.9rem;">📷 / 🎥 點擊拍攝或選擇【照片 / 影片】（不限數量）</span>
+          </label>
+          <div class="multi-media-grid" id="grid_v2After"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 5. 巡檢人員手寫簽名 -->
+    <div class="card">
+      <div class="section-title">5. 巡檢人員簽名確認 *</div>
+      <div class="sig-wrapper">
+        <canvas id="signatureCanvas"></canvas>
+      </div>
+      <div class="sig-actions">
+        <span style="font-size:0.82rem; color:var(--text-sub);">請在上方白色區域內手寫簽名</span>
+        <button type="button" class="clear-sig-btn" onclick="clearSignature()">清除重簽</button>
+      </div>
+    </div>
+
+    <button type="submit" class="submit-btn" id="submitBtn">💧 確認簽名並送出巡檢紀錄</button>
+    <div id="statusMsg" class="status-msg"></div>
+  </form>
+</div>
+
+<script>
+  const photoStore = {
+    abnormal: "",
+    remaining: ""
+  };
+
+  const valveMediaStore = {
+    v1Before: [],
+    v1After: [],
+    v2Before: [],
+    v2After: []
+  };
+
+  let assignedShift = "收尾";
+  let assignedTimeStatus = "正常";
+  let selectedLevelNumber = null;
+  let hasSignature = false;
+  let isValveCardActive = false;
+  let isManuallyOpenedValve = false;
+  let isSubmittingDone = false;
+  let sigCanvas, sigCtx;
+
+  window.onload = function() {
+    initSignaturePad();
+    updateTimeAndAutoShift();
+    setInterval(updateTimeAndAutoShift, 5000);
+    setupExitLockGuard();
+  };
+
+  function setupExitLockGuard() {
+    window.addEventListener("beforeunload", function (e) {
+      if (isValveCardActive && !isSubmittingDone) {
+        const msg = "⚠️ 加藥器逆止閥清潔卡片尚未完成拍照/錄影並儲存，不能退出畫面！";
+        e.preventDefault();
+        e.returnValue = msg;
+        return msg;
+      }
+    });
+
+    history.pushState(null, document.title, location.href);
+    window.addEventListener("popstate", function () {
+      if (isValveCardActive && !isSubmittingDone) {
+        history.pushState(null, document.title, location.href);
+        alert("⚠️ 逆止閥清潔卡片已出現！必須完成 4 個清潔項目上傳並儲存，不能退出畫面！");
+      }
+    });
+  }
+
+  function updateTimeAndAutoShift() {
+    const clock = WaterHistory.clock();
+    const yyyy = clock.year;
+    const mm = String(clock.month).padStart(2, '0');
+    const dd = String(clock.day).padStart(2, '0');
+    const hh = String(clock.hour).padStart(2, '0');
+    const min = String(clock.minute).padStart(2, '0');
+
+    document.getElementById("currentDateTime").textContent = `${yyyy}-${mm}-${dd} ${hh}:${min}`;
+
+    const totalMins = clock.minutes;
+    const shiftDisplay = document.getElementById("autoShiftDisplay");
+    const statusPill = document.getElementById("shiftStatusPill");
+
+    if (totalMins >= 1080) {
+      assignedShift = "收尾";
+      assignedTimeStatus = "正常(18:00後收尾)";
+      shiftDisplay.textContent = "🌙 收尾時段";
+      statusPill.className = "shift-status-pill";
+      statusPill.textContent = "18:00 後自動收尾";
+    } else if (totalMins >= 300 && totalMins <= 420) {
+      assignedShift = "06:00";
+      assignedTimeStatus = "準時(05:00-07:00)";
+      shiftDisplay.textContent = "☀️ 06:00 早班巡檢";
+      statusPill.className = "shift-status-pill";
+      statusPill.textContent = "準時 (±1小時內)";
+    } else if (totalMins >= 660 && totalMins <= 780) {
+      assignedShift = "12:00";
+      assignedTimeStatus = "準時(11:00-13:00)";
+      shiftDisplay.textContent = "🕛 12:00 午間巡檢";
+      statusPill.className = "shift-status-pill";
+      statusPill.textContent = "準時 (±1小時內)";
+    } else if (totalMins >= 960 && totalMins < 1080) {
+      assignedShift = "17:00";
+      assignedTimeStatus = "準時(16:00-18:00)";
+      shiftDisplay.textContent = "🌇 17:00 傍晚巡檢";
+      statusPill.className = "shift-status-pill";
+      statusPill.textContent = "準時 (±1小時內)";
+    } else {
+      if (totalMins < 540) {
+        assignedShift = "06:00";
+      } else if (totalMins < 870) {
+        assignedShift = "12:00";
+      } else {
+        assignedShift = "17:00";
+      }
+      assignedTimeStatus = `跨時段補登(${hh}:${min})`;
+      shiftDisplay.textContent = `⏰ ${assignedShift} 時段 (補登)`;
+      statusPill.className = "shift-status-pill warn";
+      statusPill.textContent = "非正負1小時內";
+    }
+
+    evaluateValveScheduleByStartDate();
+  }
+
+  function evaluateValveScheduleByStartDate() {
+    if (isManuallyOpenedValve) {
+      return;
+    }
+
+    const todayMidnight = Date.parse(WaterHistory.clock().date+'T00:00:00+08:00');
+    const firstCleanMidnight = Date.parse('2026-11-16T00:00:00+08:00');
+    const diffDays = Math.round((todayMidnight - firstCleanMidnight) / 86400000);
+
+    const isScheduledCleanDay = (diffDays >= 0 && diffDays % 2 === 0);
+
+    if (isScheduledCleanDay && assignedShift === "收尾") {
+      showValveCard(true, "排程清潔日・收尾時段強制清潔", false);
+    } else {
+      showValveCard(false, "", false);
+    }
+  }
+
+  function showValveCard(showCard, badgeText, allowCancel) {
+    const card = document.getElementById("valveSectionCard");
+    const btnWrap = document.getElementById("manualValveBtnWrap");
+    const badge = document.getElementById("valveDueBadge");
+    const cancelBtn = document.getElementById("cancelManualValveBtn");
+
+    if (showCard) {
+      isValveCardActive = true;
+      card.style.display = "block";
+      btnWrap.style.display = "none";
+      cancelBtn.style.display = allowCancel ? "inline-block" : "none";
+      const allReady = areAllValveSlotsFilled();
+      if (badgeText && !allReady) {
+        badge.className = "shift-status-pill danger";
+        badge.textContent = "🔒 " + badgeText;
+      }
+    } else {
+      isValveCardActive = false;
+      card.style.display = "none";
+      btnWrap.style.display = "block";
+      cancelBtn.style.display = "none";
+    }
+  }
+
+  function openValveCardManually() {
+    isManuallyOpenedValve = true;
+    showValveCard(true, "手動開啟清潔卡片 (不限數量)", true);
+    document.getElementById("valveSectionCard").scrollIntoView({ behavior: "smooth", block: "center" });
+  }
+
+  function cancelManualValveCard() {
+    isManuallyOpenedValve = false;
+    Object.keys(valveMediaStore).forEach(k => {
+      valveMediaStore[k] = [];
+      renderValveMediaGrid(k);
+    });
+    evaluateValveScheduleByStartDate();
+  }
+
+  function areAllValveSlotsFilled() {
+    return (
+      valveMediaStore.v1Before.length > 0 &&
+      valveMediaStore.v1After.length > 0 &&
+      valveMediaStore.v2Before.length > 0 &&
+      valveMediaStore.v2After.length > 0
+    );
+  }
+
+  function handleMultiMediaSelect(event, slotKey) {
+    const files = Array.from(event.target.files || []);
+    if (files.length === 0) return;
+
+    files.forEach(file => {
+      if (file.type.startsWith("video/")) {
+        const maxVideoBytes = 35 * 1024 * 1024;
+        if (file.size > maxVideoBytes) {
+          alert(`⚠️ 影片「${file.name}」超過 35MB，建議縮短錄影秒數（約 10~15 秒內）再上傳！`);
+          return;
+        }
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          valveMediaStore[slotKey].push({
+            kind: "video",
+            name: file.name || "video.mp4",
+            mimeType: file.type || "video/mp4",
+            dataUrl: e.target.result
+          });
+          renderValveMediaGrid(slotKey);
+          updateValveLockStatusUI();
+        };
+        reader.readAsDataURL(file);
+      } else if (file.type.startsWith("image/")) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          const img = new Image();
+          img.onload = function() {
+            const canvas = document.createElement('canvas');
+            const maxDim = 1100;
+            let width = img.width;
+            let height = img.height;
+
+            if (width > height && width > maxDim) {
+              height = Math.round((height * maxDim) / width);
+              width = maxDim;
+            } else if (height > maxDim) {
+              width = Math.round((width * maxDim) / height);
+              height = maxDim;
+            }
+
+            canvas.width = width;
+            canvas.height = height;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0, width, height);
+
+            const compressedUrl = canvas.toDataURL('image/jpeg', 0.76);
+            valveMediaStore[slotKey].push({
+              kind: "image",
+              name: file.name || "photo.jpg",
+              mimeType: "image/jpeg",
+              dataUrl: compressedUrl
+            });
+            renderValveMediaGrid(slotKey);
+            updateValveLockStatusUI();
+          };
+          img.src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+
+    event.target.value = "";
+  }
+
+  function removeValveMedia(slotKey, index) {
+    valveMediaStore[slotKey].splice(index, 1);
+    renderValveMediaGrid(slotKey);
+    updateValveLockStatusUI();
+  }
+
+  function renderValveMediaGrid(slotKey) {
+    const grid = document.getElementById("grid_" + slotKey);
+    const badge = document.getElementById("countBadge_" + slotKey);
+    const slotCard = document.getElementById("slotCard_" + slotKey);
+    const list = valveMediaStore[slotKey];
+
+    if (list.length === 0) {
+      badge.textContent = "尚未上傳 (0)";
+      slotCard.classList.add("missing-slot");
+      grid.innerHTML = "";
+      return;
+    }
+
+    const imgCount = list.filter(x => x.kind === "image").length;
+    const vidCount = list.filter(x => x.kind === "video").length;
+    badge.textContent = `✓ 已選 ${list.length} 個檔案 (${imgCount}圖 / ${vidCount}影)`;
+    slotCard.classList.remove("missing-slot");
+
+    grid.innerHTML = list.map((item, idx) => {
+      if (item.kind === "video") {
+        return `
+          <div class="media-thumb-card">
+            <video src="${item.dataUrl}" muted playsinline preload="metadata"></video>
+            <span class="media-type-badge">🎥 影片</span>
+            <button type="button" class="media-remove-btn" onclick="removeValveMedia('${slotKey}', ${idx})">✕</button>
+          </div>
+        `;
+      } else {
+        return `
+          <div class="media-thumb-card">
+            <img src="${item.dataUrl}" alt="預覽圖">
+            <span class="media-type-badge">📷 照片</span>
+            <button type="button" class="media-remove-btn" onclick="removeValveMedia('${slotKey}', ${idx})">✕</button>
+          </div>
+        `;
+      }
+    }).join("");
+  }
+
+  function updateValveLockStatusUI() {
+    if (!isValveCardActive) return;
+    const allReady = areAllValveSlotsFilled();
+    const notice = document.getElementById("valveLockNotice");
+    const badge = document.getElementById("valveDueBadge");
+
+    if (allReady) {
+      const totalFiles =
+        valveMediaStore.v1Before.length +
+        valveMediaStore.v1After.length +
+        valveMediaStore.v2Before.length +
+        valveMediaStore.v2After.length;
+      notice.style.backgroundColor = "#CCFBF1";
+      notice.style.borderColor = "#5EEAD4";
+      notice.style.color = "#0F766E";
+      notice.textContent = `✓ 4 個逆止閥清潔項目皆已上傳（共 ${totalFiles} 個照片/影片檔案，可繼續追加）！請完成簽名後送出。`;
+      badge.className = "shift-status-pill";
+      badge.textContent = `✓ 已上傳 ${totalFiles} 個檔案`;
+    } else {
+      notice.style.backgroundColor = "#FEF2F2";
+      notice.style.borderColor = "#FCA5A5";
+      notice.style.color = "#B91C1C";
+      notice.textContent = "⚠️ 此清潔卡片已啟動！每個項目至少需上傳 1 個檔案（支援照片或影片，可連續多選或不限數量追加），完成後才可儲存或離開畫面。";
+      badge.className = "shift-status-pill danger";
+      badge.textContent = "🔒 尚有項目未上傳";
+    }
+  }
+
+  function checkAbnormalState() {
+    const noiseVal = document.querySelector('input[name="noiseCheck"]:checked')?.value || "";
+    const leakVal = document.querySelector('input[name="leakCheck"]:checked')?.value || "";
+    const pipeVal = document.querySelector('input[name="pipeCheck"]:checked')?.value || "";
+    const waterVal = document.querySelector('input[name="waterLevelCheck"]:checked')?.value || "";
+
+    const hasAbnormal =
+      noiseVal.includes("異常") ||
+      leakVal.includes("異常") ||
+      pipeVal.includes("異常") ||
+      waterVal.includes("異常");
+
+    const abnormalSection = document.getElementById("abnormalSection");
+    const notesInput = document.getElementById("notes");
+
+    if (hasAbnormal) {
+      abnormalSection.style.display = "block";
+      notesInput.required = true;
+    } else {
+      abnormalSection.style.display = "none";
+      notesInput.required = false;
+    }
+  }
+
+  function selectLevel(level) {
+    selectedLevelNumber = level;
+    document.getElementById("remainingAmount").value = level + "分";
+
+    const allBtns = document.querySelectorAll(".level-btn");
+    allBtns.forEach(btn => {
+      btn.classList.remove("selected-normal", "selected-low");
+      if (parseInt(btn.getAttribute("data-level"), 10) === level) {
+        if (level <= 2) {
+          btn.classList.add("selected-low");
+        } else {
+          btn.classList.add("selected-normal");
+        }
+      }
+    });
+
+    const alertBox = document.getElementById("pwaterAlertBox");
+    if (level <= 2) {
+      alertBox.style.display = "block";
+      alert("🚨 警示：藥劑剩餘量已達 2（或更低），請立即補 P 水！+2桶P水 補水至7分");
+    } else {
+      alertBox.style.display = "none";
+    }
+  }
+
+  function handleImageSelect(event, previewId, storeKey) {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      const img = new Image();
+      img.onload = function() {
+        const canvas = document.createElement('canvas');
+        const maxDim = 1100;
+        let width = img.width;
+        let height = img.height;
+
+        if (width > height && width > maxDim) {
+          height = Math.round((height * maxDim) / width);
+          width = maxDim;
+        } else if (height > maxDim) {
+          width = Math.round((width * maxDim) / height);
+          height = maxDim;
+        }
+
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, width, height);
+
+        const dataUrl = canvas.toDataURL('image/jpeg', 0.76);
+        const previewEl = document.getElementById(previewId);
+        previewEl.src = dataUrl;
+        previewEl.style.display = "inline-block";
+
+        photoStore[storeKey] = dataUrl;
+
+        const textMap = {
+          abnormal: ["abnormalUploadText", "✓ 異常照片已準備（點擊可重拍）"],
+          remaining: ["remainingUploadText", "✓ 剩餘量照片已準備（點擊可重拍）"]
+        };
+        if (textMap[storeKey]) {
+          document.getElementById(textMap[storeKey][0]).textContent = textMap[storeKey][1];
+        }
+      };
+      img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  }
+
+  function initSignaturePad() {
+    sigCanvas = document.getElementById("signatureCanvas");
+    sigCtx = sigCanvas.getContext("2d");
+
+    function resizeCanvas() {
+      const rect = sigCanvas.getBoundingClientRect();
+      const ratio = window.devicePixelRatio || 1;
+      sigCanvas.width = rect.width * ratio;
+      sigCanvas.height = rect.height * ratio;
+      sigCtx.scale(ratio, ratio);
+      sigCtx.fillStyle = "#FFFFFF";
+      sigCtx.fillRect(0, 0, rect.width, rect.height);
+      sigCtx.lineWidth = 2.8;
+      sigCtx.lineCap = "round";
+      sigCtx.lineJoin = "round";
+      sigCtx.strokeStyle = "#0F172A";
+    }
+    resizeCanvas();
+
+    let drawing = false;
+
+    function getPos(e) {
+      const rect = sigCanvas.getBoundingClientRect();
+      const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+      const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+      return {
+        x: clientX - rect.left,
+        y: clientY - rect.top
+      };
+    }
+
+    function startDraw(e) {
+      e.preventDefault();
+      drawing = true;
+      hasSignature = true;
+      const pos = getPos(e);
+      sigCtx.beginPath();
+      sigCtx.moveTo(pos.x, pos.y);
+    }
+
+    function moveDraw(e) {
+      if (!drawing) return;
+      e.preventDefault();
+      const pos = getPos(e);
+      sigCtx.lineTo(pos.x, pos.y);
+      sigCtx.stroke();
+    }
+
+    function endDraw(e) {
+      if (!drawing) return;
+      e.preventDefault();
+      drawing = false;
+    }
+
+    sigCanvas.addEventListener("mousedown", startDraw);
+    sigCanvas.addEventListener("mousemove", moveDraw);
+    window.addEventListener("mouseup", endDraw);
+
+    sigCanvas.addEventListener("touchstart", startDraw, { passive: false });
+    sigCanvas.addEventListener("touchmove", moveDraw, { passive: false });
+    window.addEventListener("touchend", endDraw);
+  }
+
+  function clearSignature() {
+    const rect = sigCanvas.getBoundingClientRect();
+    sigCtx.fillStyle = "#FFFFFF";
+    sigCtx.fillRect(0, 0, rect.width, rect.height);
+    hasSignature = false;
+  }
+
+  function uploadSingleValveFile(slotLabel, index, item, shiftName) {
+    return new Promise((resolve, reject) => {
+      google.script.run
+        .withSuccessHandler(function(res) {
+          if (res && res.success) {
+            resolve(res.url);
+          } else {
+            reject(new Error(res ? res.message : "檔案上傳失敗"));
+          }
+        })
+        .withFailureHandler(function(err) {
+          reject(err);
+        })
+        .uploadValveMediaFile({
+          slotLabel: slotLabel,
+          index: index + 1,
+          kind: item.kind,
+          fileName: item.name,
+          shift: shiftName,
+          base64Data: item.dataUrl
+        });
+    });
+  }
+
+  async function handleSubmit(e) {
+    e.preventDefault();
+    updateTimeAndAutoShift();
+
+    const statusMsg = document.getElementById("statusMsg");
+    statusMsg.className = "status-msg";
+    statusMsg.style.removeProperty("display");
+
+    const noiseVal = document.querySelector('input[name="noiseCheck"]:checked')?.value || "";
+    const leakVal = document.querySelector('input[name="leakCheck"]:checked')?.value || "";
+    const pipeVal = document.querySelector('input[name="pipeCheck"]:checked')?.value || "";
+    const waterVal = document.querySelector('input[name="waterLevelCheck"]:checked')?.value || "";
+
+    const hasAbnormal =
+      noiseVal.includes("異常") ||
+      leakVal.includes("異常") ||
+      pipeVal.includes("異常") ||
+      waterVal.includes("異常");
+
+    if (hasAbnormal && !photoStore.abnormal) {
+      statusMsg.className = "status-msg error";
+      statusMsg.textContent = "⚠️ 您勾選了異常項目，請務必拍攝「異常部位照片」後再送出！";
+      return;
+    }
+
+    const flowRateVal = document.getElementById("chemicalFlowRate").value.trim();
+    if (!flowRateVal) {
+      statusMsg.className = "status-msg error";
+      statusMsg.textContent = "⚠️ 請輸入「加藥劑流數」後再送出！";
+      return;
+    }
+
+    if (selectedLevelNumber === null) {
+      statusMsg.className = "status-msg error";
+      statusMsg.textContent = "⚠️ 請點選「目前剩餘量（7 ~ 1）」後再送出！";
+      return;
+    }
+
+    if (!photoStore.remaining) {
+      statusMsg.className = "status-msg error";
+      statusMsg.textContent = "⚠️ 請拍攝「藥劑桶剩餘量照片」後再送出！";
+      return;
+    }
+
+    const doValve = isValveCardActive ? "是" : "否";
+    if (isValveCardActive && !areAllValveSlotsFilled()) {
+      statusMsg.className = "status-msg error";
+      statusMsg.textContent = "⚠️ 逆止閥清潔卡片已開啟，4 個清潔項目皆須至少上傳 1 個照片或影片才能儲存！";
+      document.getElementById("valveSectionCard").scrollIntoView({ behavior: "smooth", block: "center" });
+      return;
+    }
+
+    if (!hasSignature) {
+      statusMsg.className = "status-msg error";
+      statusMsg.textContent = "⚠️ 送出前請先在下方簽名欄完成手寫簽名！";
+      return;
+    }
+
+    const submitBtn = document.getElementById("submitBtn");
+    submitBtn.disabled = true;
+
+    try {
+      let v1BeforeUrls = [];
+      let v1AfterUrls = [];
+      let v2BeforeUrls = [];
+      let v2AfterUrls = [];
+
+      if (isValveCardActive) {
+        const tasks = [
+          { key: "v1Before", label: "逆止閥1_清潔前", target: v1BeforeUrls },
+          { key: "v1After",  label: "逆止閥1_清潔後", target: v1AfterUrls },
+          { key: "v2Before", label: "逆止閥2_清潔前", target: v2BeforeUrls },
+          { key: "v2After",  label: "逆止閥2_清潔後", target: v2AfterUrls }
+        ];
+
+        const totalCount =
+          valveMediaStore.v1Before.length +
+          valveMediaStore.v1After.length +
+          valveMediaStore.v2Before.length +
+          valveMediaStore.v2After.length;
+        let uploadedCount = 0;
+
+        for (const task of tasks) {
+          const items = valveMediaStore[task.key];
+          for (let i = 0; i < items.length; i++) {
+            uploadedCount++;
+            submitBtn.textContent = `💧 正在上傳逆止閥檔案 (${uploadedCount} / ${totalCount})...`;
+            const url = await uploadSingleValveFile(task.label, i, items[i], assignedShift);
+            task.target.push(url);
+          }
+        }
+      }
+
+      submitBtn.textContent = "💧 正在寫入巡檢紀錄與簽名...";
+
+      const remainingVal = document.getElementById("remainingAmount").value.trim();
+      const pWaterStatus = (selectedLevelNumber <= 2) ? "⚠️需補P水(+2桶P水 補水至7分)" : "正常";
+      const isRefilled = document.getElementById("pWaterRefilledCheck").checked;
+      const pWaterRefilledText = isRefilled ? "✅已補至7分滿" : "未補水";
+
+      const payload = {
+        chemicalFlowRate: flowRateVal,
+        pWaterRefilled: pWaterRefilledText,
+        shift: assignedShift,
+        timeStatus: assignedTimeStatus,
+        noiseCheck: noiseVal,
+        leakCheck: leakVal,
+        pipeCheck: pipeVal,
+        waterLevelCheck: waterVal,
+        notes: document.getElementById("notes").value.trim(),
+        abnormalPhotoBase64: hasAbnormal ? photoStore.abnormal : "",
+        remainingAmount: remainingVal,
+        pWaterAlert: pWaterStatus,
+        remainingPhotoBase64: photoStore.remaining,
+        doValveClean: doValve,
+        v1BeforeUrls: v1BeforeUrls.join("\n"),
+        v1AfterUrls: v1AfterUrls.join("\n"),
+        v2BeforeUrls: v2BeforeUrls.join("\n"),
+        v2AfterUrls: v2AfterUrls.join("\n"),
+        signatureBase64: sigCanvas.toDataURL("image/png")
+      };
+
+      google.script.run
+        .withSuccessHandler(function(res) {
+          submitBtn.disabled = false;
+          submitBtn.textContent = "💧 確認簽名並送出巡檢紀錄";
+          if (res.success) {
+            isSubmittingDone = true;
+            refreshLastInspection();
+            isManuallyOpenedValve = false;
+            statusMsg.className = "status-msg success";
+            statusMsg.textContent = `✅ 巡檢紀錄、照片/影片與簽名已成功上傳！（日期：${res.dateStr} ${res.timeStr}）`;
+            document.getElementById("inspectionForm").reset();
+            document.querySelectorAll(".preview-img").forEach(img => img.style.display = "none");
+            document.querySelectorAll(".level-btn").forEach(btn => btn.classList.remove("selected-normal", "selected-low"));
+            selectedLevelNumber = null;
+            document.getElementById("remainingAmount").value = "";
+            document.getElementById("pWaterRefilledCheck").checked = false;
+            document.getElementById("abnormalSection").style.display = "none";
+            document.getElementById("pwaterAlertBox").style.display = "none";
+            photoStore.abnormal = "";
+            photoStore.remaining = "";
+            Object.keys(valveMediaStore).forEach(k => {
+              valveMediaStore[k] = [];
+              renderValveMediaGrid(k);
+            });
+            clearSignature();
+            updateTimeAndAutoShift();
+          } else {
+            statusMsg.className = "status-msg error";
+            statusMsg.textContent = "❌ 寫入失敗：" + res.message;
+          }
+        })
+        .withFailureHandler(function(err) {
+          submitBtn.disabled = false;
+          submitBtn.textContent = "💧 確認簽名並送出巡檢紀錄";
+          statusMsg.className = "status-msg error";
+          statusMsg.textContent = "❌ 網路或系統錯誤：" + err.message;
+        })
+        .submitInspection(payload);
+    } catch (uploadErr) {
+      submitBtn.disabled = false;
+      submitBtn.textContent = "💧 確認簽名並送出巡檢紀錄";
+      statusMsg.className = "status-msg error";
+      statusMsg.textContent = "❌ 逆止閥檔案上傳失敗：" + uploadErr.message;
+    }
+  }
+</script>
+</body>
+</html>
