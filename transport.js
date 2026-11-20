@@ -28,7 +28,7 @@
     status(error.message,true);readyReject(error);
   },60000);
   function mount(){
-    frame=document.createElement("iframe");frame.hidden=true;frame.title="巡檢資料連線";
+    frame=document.createElement("iframe");frame.style.cssText="position:fixed;left:-100px;top:0;width:1px;height:1px;border:0;pointer-events:none";frame.setAttribute("aria-hidden","true");frame.title="巡檢資料連線";
     const url=new URL(window.WATER_CONFIG.backendUrl);
     url.searchParams.set("page","bridge");url.searchParams.set("channel",channel);
     frame.src=url.href;document.body.appendChild(frame);
