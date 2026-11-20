@@ -13,6 +13,7 @@
   }
   window.addEventListener("message",event => {
     const data=event.data;
+    if(data?.channel===channel && data.type==="water-ready"){const label=document.getElementById("connectionStatus");if(label)label.dataset.bridgeOrigin=event.origin;}
     if (!data || data.channel!==channel || !/^https:\/\/(?:[a-z0-9-]+-)?script\.googleusercontent\.com$/.test(event.origin)) return;
     if(data.type==="water-ready" && !peer){
       peer=event.source;peerOrigin=event.origin;clearTimeout(connectTimer);
@@ -28,9 +29,10 @@
     status(error.message,true);readyReject(error);
   },60000);
   function mount(){
-    frame=document.createElement("iframe");frame.style.cssText="position:fixed;left:-100px;top:0;width:1px;height:1px;border:0;pointer-events:none";frame.setAttribute("aria-hidden","true");frame.title="巡檢資料連線";
+    frame=document.createElement("iframe");frame.style.cssText="position:fixed;left:0;top:0;width:1px;height:1px;border:0;opacity:0;pointer-events:none";frame.setAttribute("aria-hidden","true");frame.title="巡檢資料連線";
     const url=new URL(window.WATER_CONFIG.backendUrl);
     url.searchParams.set("page","bridge");url.searchParams.set("channel",channel);
+    frame.addEventListener("load",()=>{const label=document.getElementById("connectionStatus");if(label)label.dataset.bridgeFrameLoaded="true";});
     frame.src=url.href;document.body.appendChild(frame);
   }
   if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",mount);else mount();
