@@ -12,9 +12,11 @@ const normal={date:'2026-11-16',time:'06:00:00',shift:'6:00',noise:'正常',leak
 const records=[normal,{...normal,time:'06:15:00'},{...normal,date:'2026-11-20',shift:'12:00',noise:'異常',pWaterAlert:'需補P水'}];
 const sum=H.summarize(records,now);
 assert.equal(sum.weekStart,'2026-11-16');assert.equal(sum.today,'2026-11-20');
-assert.equal(sum.missingCount,17); // 4 past days + 3 elapsed slots today, minus two completed slots
-assert.equal(sum.abnormalCount,1);assert.equal(sum.pWaterCount,1);
+assert.equal(sum.missingCount,16); // 17:00 completion also covers that date's closing slot
+assert.equal(sum.abnormalCount,1);assert.equal(sum.pWaterCount,1);assert.equal(sum.valveCount,0);
 assert(!sum.missing.some(x=>x.date==='2026-11-20'&&x.shift==='收尾'));
+assert(!H.summarize([{...normal,date:'2026-11-19',shift:'17:00'}],now).missing.some(x=>x.date==='2026-11-19'&&x.shift==='收尾'));
+assert.equal(H.summarize([{...normal,date:'2026-11-19',doValveClean:'是'},{...normal,date:'2026-11-15',doValveClean:'是'}],now).valveCount,1);
 assert(!H.expired('2026-11-20','06:00',new Date('2026-11-19T23:00:00Z')));
 assert(H.expired('2026-11-20','06:00',new Date('2026-11-19T23:01:00Z')));
 assert.equal(H.summarize([],new Date('2026-11-20T01:00:00Z')).missingCount,1);

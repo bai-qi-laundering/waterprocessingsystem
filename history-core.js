@@ -43,8 +43,14 @@
     const start=days.length && days[0]<c.date ? (days[0]>monday?days[0]:monday) : c.date;
     const done=new Set(records.map(r=>r.date+'|'+normalize(r.shift,r.timeStatus)));
     const missing=[];
-    for(let d=start;d<=c.date;d=addDay(d,1))shifts.forEach(s=>{if(expired(d,s,now)&&!done.has(d+'|'+s))missing.push({date:d,shift:s});});
-    return {abnormalCount:records.filter(abnormal).length,pWaterCount:records.filter(pWater).length,missingCount:missing.length,missing,weekStart:monday,today:c.date};
+    for(let d=start;d<=c.date;d=addDay(d,1))shifts.forEach(s=>{
+      // A completed 17:00 inspection means the workday ended around 17:00,
+      // so a separate closing inspection is not required for that date.
+      const closingCovered=s==='收尾'&&done.has(d+'|17:00');
+      if(expired(d,s,now)&&!done.has(d+'|'+s)&&!closingCovered)missing.push({date:d,shift:s});
+    });
+    const valveCount=records.filter(r=>validDate(r.date)&&r.date>=monday&&r.date<=c.date&&String(r.doValveClean||'')==='是').length;
+    return {abnormalCount:records.filter(abnormal).length,pWaterCount:records.filter(pWater).length,valveCount,missingCount:missing.length,missing,weekStart:monday,today:c.date};
   }
   function group(records) {
     const map=new Map();

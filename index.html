@@ -657,14 +657,13 @@
       border: 1px solid #FCA5A5;
     }
   </style>
-<link rel="stylesheet" href="app.css">
-<script src="config.js"></script><script src="transport.js?v=20261120-4"></script><script src="history-core.js?v=20261120-legacy1"></script><script src="inspection.js?v=20261120-legacy1" defer></script>
+<link rel="stylesheet" href="app.css?v=20261120-rules2">
+<script src="config.js"></script><script src="transport.js?v=20261120-4"></script><script src="history-core.js?v=20261120-rules2"></script><script src="inspection.js?v=20261120-rules2" defer></script>
 </head>
 <body>
 
 <div class="container">
   <nav class="top-nav"><span>百麒 · 水處理</span><a href="history.html">歷史紀錄 ↗</a></nav>
-<section class="last-inspection" aria-live="polite"><span>上次巡檢時間</span><strong id="lastInspectionTime">讀取中…</strong><button type="button" onclick="refreshLastInspection()">重新整理</button></section>
 <div id="connectionStatus" class="connection-status" role="status">正在連接巡檢資料…</div><header>
     <h1>💧 百麒國際股份有限公司</h1>
     <p>水處理設備每日四時段巡檢系統</p>
@@ -685,6 +684,7 @@
         </div>
         <span id="shiftStatusPill" class="shift-status-pill">判定中</span>
       </div>
+      <p class="last-inspection-inline" aria-live="polite">上次巡檢：<strong id="lastInspectionTime">讀取中…</strong><button type="button" onclick="refreshLastInspection()" aria-label="重新整理上次巡檢時間">重新整理</button></p>
     </div>
 
     <!-- 2. 設備狀態打勾檢查 (4項) -->

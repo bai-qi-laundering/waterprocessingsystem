@@ -19,7 +19,7 @@
   }
   function fail(message) {
     loaded=false;
-    ['abnormalCount','pWaterCount','missingCount'].forEach(id=>el(id).textContent='—');
+    ['abnormalCount','pWaterCount','missingCount','valveCount'].forEach(id=>el(id).textContent='—');
     el('recordsContainer').replaceChildren();
     const box=document.createElement('div');box.className='empty-state';box.textContent='無法讀取紀錄：'+message;
     el('recordsContainer').append(box);
@@ -29,7 +29,8 @@
     el('abnormalCount').textContent=summary.abnormalCount;
     el('pWaterCount').textContent=summary.pWaterCount;
     el('missingCount').textContent=summary.missingCount;
-    el('weekRange').textContent='已載入 '+records.length+' 筆巡檢紀錄。本週 '+summary.weekStart+' 至 '+summary.today+'；只計算已過截止時間的時段，同時段多筆只算完成一次。';
+    el('valveCount').textContent=summary.valveCount;
+    el('weekRange').textContent='已載入 '+records.length+' 筆巡檢紀錄。本週 '+summary.weekStart+' 至 '+summary.today+'；只計算已過截止時間的時段。當日已有 17:00 紀錄時，不要求收尾巡檢。';
   }
   function matches(r,status) {
     if(status==='ISSUE')return H.abnormal(r)||H.pWater(r);
@@ -58,9 +59,11 @@
         const rows=(groups.get(day)||[]).filter(r=>r.shift===s);
         const visible=rows.filter(r=>matches(r,status));
         if(status!=='ALL'&&!visible.length)return '';
-        const complete=rows.length>0,late=H.expired(day,s);
-        const text=complete?(rows.length>1?rows.length+' 筆紀錄 · 點開查看':'已巡檢 · 點開查看'):late?'已過截止時間，尚無紀錄':'尚無紀錄';
-        return '<details class="slot '+(complete?'complete':late?'overdue':'')+'" data-day="'+day+'" data-shift="'+escape(s)+'"><summary><span><span class="slot-name">'+escape(s)+'</span><span class="slot-sub">'+text+'</span>'+(rows.some(r=>r.doValveClean==='是')?'<span class="valve-note">逆止閥清潔紀錄</span>':'')+'</span><span class="slot-check" aria-label="'+(complete?'已有巡檢紀錄':'尚無巡檢紀錄')+'">'+(complete?'✓':'')+'</span></summary><div class="slot-body"></div></details>';
+        const complete=rows.length>0;
+        const closingCovered=s==='收尾'&&(groups.get(day)||[]).some(r=>r.shift==='17:00');
+        const late=H.expired(day,s)&&!closingCovered;
+        const text=complete?(rows.length>1?rows.length+' 筆紀錄 · 點開查看':'已巡檢 · 點開查看'):closingCovered?'17:00 已巡檢，當日不需收尾':late?'已過截止時間，尚無紀錄':'尚無紀錄';
+        return '<details class="slot '+(complete?'complete':closingCovered?'covered':late?'overdue':'')+'" data-day="'+day+'" data-shift="'+escape(s)+'"><summary><span><span class="slot-name">'+escape(s)+'</span><span class="slot-sub">'+text+'</span>'+(rows.some(r=>r.doValveClean==='是')?'<span class="valve-note">逆止閥清潔紀錄</span>':'')+'</span><span class="slot-check" aria-label="'+(complete?'已有巡檢紀錄':'尚無巡檢紀錄')+'">'+(complete?'✓':'')+'</span></summary><div class="slot-body"></div></details>';
       }).join('');
       return '<section class="day-card"><h2><time datetime="'+day+'">'+day.slice(0,4)+' / '+escape(label)+'</time></h2>'+slots+'</section>';
     }).join('')||'<div class="empty-state">目前沒有符合條件的巡檢紀錄。</div>';

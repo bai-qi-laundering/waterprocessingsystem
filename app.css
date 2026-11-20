@@ -34,3 +34,20 @@
   #recordsContainer{margin-inline:-14px;padding-left:14px;padding-right:30px;scroll-padding-inline:14px}
   .day-card{flex-basis:calc(100vw - 48px);width:calc(100vw - 48px);min-width:280px}
 }
+
+
+/* 2026-11-20 巡檢規則與緊湊卡片 */
+.last-inspection-inline{margin:10px 2px 0;color:#607683;font-size:13px;line-height:1.6}
+.last-inspection-inline strong{color:#173d4e;font-weight:750}
+.last-inspection-inline button{border:0;background:transparent;color:#126b82;font:inherit;font-weight:700;padding:6px 8px;margin-left:4px;cursor:pointer}
+.summary-grid{grid-template-columns:repeat(4,1fr)}
+.summary-card:nth-child(4){border-top:4px solid #98c1d9}
+.day-card{flex-basis:clamp(250px,27.2vw,296px);width:clamp(250px,27.2vw,296px)}
+.slot.overdue{background:#fff3f6;border-color:#ffd7e2}
+.slot.overdue summary{background:#fff3f6}
+.slot.covered{background:#f7fbf5;border-color:#cdeac0}
+.slot.covered .slot-sub{color:#5d7760}
+@media(max-width:700px){.summary-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:600px){
+  .day-card{flex-basis:min(80vw,296px);width:min(80vw,296px);min-width:250px}
+}
