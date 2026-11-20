@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#126b82">
   <title>歷史紀錄｜百麒水處理</title>
-  <link rel="stylesheet" href="app.css">
+  <link rel="stylesheet" href="app.css?v=20261120-horizontal1">
   <script src="config.js"></script>
   <script src="transport.js?v=20261120-4"></script>
   <script src="history-core.js?v=20261120-legacy1"></script>
@@ -29,7 +29,8 @@
     <button type="button" id="clearFilters">清除篩選</button>
     <button type="button" id="refreshHistory">重新整理</button>
   </div>
-  <div id="recordsContainer" aria-live="polite"><div class="empty-state">正在讀取巡檢紀錄…</div></div>
+  <p class="history-message scroll-hint">最新日期在左側，向右滑動查看更早的紀錄 →</p>
+  <div id="recordsContainer" aria-live="polite" aria-label="每日巡檢紀錄，可橫向滑動"><div class="empty-state">正在讀取巡檢紀錄…</div></div>
   <button id="loadMore" type="button" class="load-more" hidden>載入更早紀錄</button>
   <p class="history-message">勾選表示已有巡檢紀錄；展開時段可查看明細。縮圖在展開後才載入，不增加照片、影片的上傳步驟。</p>
 </main>
