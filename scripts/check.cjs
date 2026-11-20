@@ -12,7 +12,7 @@ const normal={date:'2026-11-16',time:'06:00:00',shift:'6:00',noise:'正常',leak
 const records=[normal,{...normal,time:'06:15:00'},{...normal,date:'2026-11-20',shift:'12:00',noise:'異常',pWaterAlert:'需補P水'}];
 const sum=H.summarize(records,now);
 assert.equal(sum.weekStart,'2026-11-16');assert.equal(sum.today,'2026-11-20');
-assert.equal(sum.missingCount,16); // 17:00 completion also covers that date's closing slot
+assert.equal(sum.missingCount,17); // today's closing slot is not due yet; past-day 17:00 coverage is tested below
 assert.equal(sum.abnormalCount,1);assert.equal(sum.pWaterCount,1);assert.equal(sum.valveCount,0);
 assert(!sum.missing.some(x=>x.date==='2026-11-20'&&x.shift==='收尾'));
 assert(!H.summarize([{...normal,date:'2026-11-19',shift:'17:00'}],now).missing.some(x=>x.date==='2026-11-19'&&x.shift==='收尾'));
