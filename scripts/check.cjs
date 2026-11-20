@@ -31,7 +31,7 @@ console.log('PASS: syntax, assets, Taipei midnight, deadlines, weekly misses, du
   const handlers={}, timers=[];
   let mounted, sent, result;
   const win={WATER_CONFIG:{backendUrl:'https://script.google.com/macros/s/test/exec'},addEventListener:(name,fn)=>handlers[name]=fn};
-  const doc={readyState:'complete',createElement:()=>({}),body:{appendChild:frame=>mounted=frame},getElementById:()=>null};
+  const doc={readyState:'complete',createElement:()=>({style:{},setAttribute:()=>{}}),body:{appendChild:frame=>mounted=frame},getElementById:()=>null};
   const context={window:win,document:doc,crypto:{randomUUID:()=> 'qa-channel'},URL,Map,Promise,Proxy,console,
     setTimeout:fn=>{timers.push(fn);return timers.length;},clearTimeout:()=>{}};
   vm.runInNewContext(fs.readFileSync(path.join(root,'transport.js'),'utf8'),context);
