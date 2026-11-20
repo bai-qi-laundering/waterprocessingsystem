@@ -5,16 +5,16 @@
   function normalize(value,status='') {
     const s=String(value??'').trim();
     if(s==='收尾')return s;
-    const simple=s.match(/^(\\d{1,2}):(\\d{2})(?::\\d{2})?$/);
+    const simple=s.match(/^(\d{1,2}):(\d{2})(?::\d{2})?$/);
     if(simple){const label=simple[1].padStart(2,'0')+':'+simple[2];if(shifts.includes(label))return label;}
     // The original sheet converts time-only shift cells to 1899 Date values.
     // Prefer the saved assignment window, preserving the original shift.
     const windows=[['05:00-07:00','06:00'],['11:00-13:00','12:00'],['16:00-18:00','17:00']];
-    const text=String(status).replace(/\\s/g,'');
+    const text=String(status).replace(/\s/g,'');
     for(const [window,label] of windows)if(text.includes(window))return label;
     let minutes=null;
     if(typeof value==='number' && value>=0 && value<1)minutes=Math.round(value*1440);
-    else if(/GMT|1899|1900|T\\d{2}:/i.test(s)){
+    else if(/GMT|1899|1900|T\d{2}:/i.test(s)){
       const parsed=new Date(s);
       if(!isNaN(parsed.getTime()))minutes=clock(parsed).minutes;
     }
