@@ -4,7 +4,7 @@ for(const file of ['config.js','transport.js','inspection.js','history.js','hist
 for(const file of ['index.html','history.html']) {
   const html=fs.readFileSync(path.join(root,file),'utf8');
   for(const match of html.matchAll(/<script(?:\s[^>]*)?>([\s\S]*?)<\/script>/g))if(match[1].trim())new vm.Script(match[1],{filename:file});
-  for(const match of html.matchAll(/(?:src|href)="([^"#?]+\.(?:js|css|html))"/g))assert(fs.existsSync(path.join(root,match[1])),file+': missing '+match[1]);
+  for(const match of html.matchAll(/(?:src|href)="([^"#?]+\.(?:js|css|html))"/g))if(!/^https?:\/\//.test(match[1]))assert(fs.existsSync(path.join(root,match[1])),file+': missing '+match[1]);
   assert(!/老闆看板|管理看板/.test(html));
 }
 const H=require('../history-core.js'),now=new Date('2026-11-20T10:01:00Z'); // Friday 18:01 Taipei
