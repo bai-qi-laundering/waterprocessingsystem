@@ -26,3 +26,29 @@ assert.equal(H.media('https://evil.example/x','拒絕').length,0);
 assert.equal(H.media('無','空白').length,0);
 assert.equal(H.validDate('2026-02-30'),false);
 console.log('PASS: syntax, assets, Taipei midnight, deadlines, weekly misses, duplicate slots, media URLs, legacy shift normalization');
+
+(async function verifyBridge() {
+  const handlers={}, timers=[];
+  let mounted, sent, result;
+  const win={WATER_CONFIG:{backendUrl:'https://script.google.com/macros/s/test/exec'},addEventListener:(name,fn)=>handlers[name]=fn};
+  const doc={readyState:'complete',createElement:()=>({}),body:{appendChild:frame=>mounted=frame},getElementById:()=>null};
+  const context={window:win,document:doc,crypto:{randomUUID:()=> 'qa-channel'},URL,Map,Promise,Proxy,console,
+    setTimeout:fn=>{timers.push(fn);return timers.length;},clearTimeout:()=>{}};
+  vm.runInNewContext(fs.readFileSync(path.join(root,'transport.js'),'utf8'),context);
+  assert(mounted.src.includes('page=bridge'));
+  const peer={postMessage:(message,origin)=>{sent={message,origin};}};
+  const origin='https://n-test-0lu-script.googleusercontent.com';
+  handlers.message({data:{channel:'qa-channel',type:'water-ready'},origin:'https://evil.example',source:peer});
+  win.google.script.run.withSuccessHandler(value=>{result=value;}).getRecordsForBoss();
+  await Promise.resolve();
+  assert.equal(sent,undefined,'Untrusted origins must not unlock calls');
+  handlers.message({data:{channel:'qa-channel',type:'water-ready'},origin,source:peer});
+  await Promise.resolve(); await Promise.resolve();
+  assert.equal(sent.origin,origin);
+  handlers.message({data:{channel:'qa-channel',type:'water-response',id:sent.message.id,result:{success:true}},origin,source:{}});
+  await Promise.resolve(); assert.equal(result,undefined,'Wrong source must be rejected');
+  handlers.message({data:{channel:'qa-channel',type:'water-response',id:sent.message.id,result:{success:true}},origin,source:peer});
+  await Promise.resolve(); await Promise.resolve();
+  assert.equal(result.success,true);
+  console.log('PASS: real Google sandbox hostname, untrusted-origin rejection, peer validation, bridge request and response');
+})().catch(error=>{console.error(error);process.exitCode=1;});
