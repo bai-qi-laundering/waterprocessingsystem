@@ -12,7 +12,7 @@
       if(token!==request)return;
       el('refreshHistory').disabled=false;
       if(!result?.success){fail(result?.message||'無法取得巡檢紀錄');return;}
-      records=(result.records||[]).map(r=>({...r,shift:H.normalize(r.shift)}));
+      records=(result.records||[]).map(H.normalizeRecord);
       groups=H.group(records);loaded=true;shown=14;
       updateSummary();render();
     }).withFailureHandler(error=>{if(token!==request)return;el('refreshHistory').disabled=false;fail(error.message);}).getRecordsForBoss();
@@ -29,7 +29,7 @@
     el('abnormalCount').textContent=summary.abnormalCount;
     el('pWaterCount').textContent=summary.pWaterCount;
     el('missingCount').textContent=summary.missingCount;
-    el('weekRange').textContent='本週 '+summary.weekStart+' 至 '+summary.today+'；只計算已過截止時間的時段，同時段多筆只算完成一次。';
+    el('weekRange').textContent='已載入 '+records.length+' 筆巡檢紀錄。本週 '+summary.weekStart+' 至 '+summary.today+'；只計算已過截止時間的時段，同時段多筆只算完成一次。';
   }
   function matches(r,status) {
     if(status==='ISSUE')return H.abnormal(r)||H.pWater(r);
@@ -53,7 +53,8 @@
     }).sort().reverse();
     el('recordsContainer').innerHTML=filteredDays.slice(0,shown).map(day=>{
       const label=new Intl.DateTimeFormat('zh-TW',{timeZone:'Asia/Taipei',month:'numeric',day:'numeric',weekday:'short'}).format(new Date(day+'T12:00:00+08:00'));
-      const slots=H.shifts.filter(s=>shift==='ALL'||s===shift).map(s=>{
+      const dayShifts=[...H.shifts,...new Set((groups.get(day)||[]).map(r=>r.shift).filter(s=>!H.shifts.includes(s)))];
+      const slots=dayShifts.filter(s=>shift==='ALL'||s===shift).map(s=>{
         const rows=(groups.get(day)||[]).filter(r=>r.shift===s);
         const visible=rows.filter(r=>matches(r,status));
         if(status!=='ALL'&&!visible.length)return '';

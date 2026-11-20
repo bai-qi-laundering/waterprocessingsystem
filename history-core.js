@@ -2,7 +2,30 @@
 (function(root) {
   const shifts = ['06:00','12:00','17:00','收尾'];
   const deadlines = [420,780,1080,1260];
-  const normalize = s => String(s || '').trim() === '6:00' ? '06:00' : String(s || '').trim();
+  function normalize(value,status='') {
+    const s=String(value??'').trim();
+    if(s==='收尾')return s;
+    const simple=s.match(/^(\\d{1,2}):(\\d{2})(?::\\d{2})?$/);
+    if(simple){const label=simple[1].padStart(2,'0')+':'+simple[2];if(shifts.includes(label))return label;}
+    // The original sheet converts time-only shift cells to 1899 Date values.
+    // Prefer the saved assignment window, preserving the original shift.
+    const windows=[['05:00-07:00','06:00'],['11:00-13:00','12:00'],['16:00-18:00','17:00']];
+    const text=String(status).replace(/\\s/g,'');
+    for(const [window,label] of windows)if(text.includes(window))return label;
+    let minutes=null;
+    if(typeof value==='number' && value>=0 && value<1)minutes=Math.round(value*1440);
+    else if(/GMT|1899|1900|T\\d{2}:/i.test(s)){
+      const parsed=new Date(s);
+      if(!isNaN(parsed.getTime()))minutes=clock(parsed).minutes;
+    }
+    if(minutes!==null){
+      const i=[360,720,1020].findIndex(target=>Math.abs(minutes-target)<=10);
+      if(i>=0)return shifts[i];
+    }
+    // Preserve unrecognized values so the page can show them instead of dropping records.
+    return s||'其他時段';
+  }
+  function normalizeRecord(r){return {...r,shift:normalize(r.shift,r.timeStatus)};}
   function clock(now = new Date()) {
     const p = Object.fromEntries(new Intl.DateTimeFormat('en-GB', {timeZone:'Asia/Taipei',year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',hourCycle:'h23'}).formatToParts(now).map(x => [x.type,x.value]));
     return {date:p.year+'-'+p.month+'-'+p.day,minutes:Number(p.hour)*60+Number(p.minute),year:Number(p.year),month:Number(p.month),day:Number(p.day),hour:Number(p.hour),minute:Number(p.minute)};
@@ -18,14 +41,14 @@
     const monday=addDay(c.date,-((weekday+6)%7));
     const days=records.map(r=>r.date).filter(validDate).sort();
     const start=days.length && days[0]<c.date ? (days[0]>monday?days[0]:monday) : c.date;
-    const done=new Set(records.map(r=>r.date+'|'+normalize(r.shift)));
+    const done=new Set(records.map(r=>r.date+'|'+normalize(r.shift,r.timeStatus)));
     const missing=[];
     for(let d=start;d<=c.date;d=addDay(d,1))shifts.forEach(s=>{if(expired(d,s,now)&&!done.has(d+'|'+s))missing.push({date:d,shift:s});});
     return {abnormalCount:records.filter(abnormal).length,pWaterCount:records.filter(pWater).length,missingCount:missing.length,missing,weekStart:monday,today:c.date};
   }
   function group(records) {
     const map=new Map();
-    records.forEach(r=>{if(!validDate(r.date))return;if(!map.has(r.date))map.set(r.date,[]);map.get(r.date).push({...r,shift:normalize(r.shift)});});
+    records.forEach(r=>{if(!validDate(r.date))return;if(!map.has(r.date))map.set(r.date,[]);map.get(r.date).push(normalizeRecord(r));});
     map.forEach(rows=>rows.sort((a,b)=>String(b.time||'').localeCompare(String(a.time||''))));
     return map;
   }
@@ -45,6 +68,6 @@
       } catch {return [];}
     });
   }
-  const api={shifts,deadlines,normalize,clock,addDay,validDate,abnormal,pWater,refilled,expired,summarize,group,media};
+  const api={shifts,deadlines,normalize,normalizeRecord,clock,addDay,validDate,abnormal,pWater,refilled,expired,summarize,group,media};
   if(typeof module!=='undefined' && module.exports)module.exports=api;else root.WaterHistory=api;
 })(typeof window!=='undefined'?window:this);

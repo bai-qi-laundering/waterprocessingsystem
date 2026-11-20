@@ -52,3 +52,20 @@ console.log('PASS: syntax, assets, Taipei midnight, deadlines, weekly misses, du
   assert.equal(result.success,true);
   console.log('PASS: real Google sandbox hostname, untrusted-origin rejection, peer validation, bridge request and response');
 })().catch(error=>{console.error(error);process.exitCode=1;});
+
+for(const [raw,status,expected] of [
+  ['Sat Dec 30 1899 06:00:00 GMT+0805 (Taipei Standard Time)','準時(05:00-07:00)','06:00'],
+  ['Sat Dec 30 1899 12:00:00 GMT+0805 (Taipei Standard Time)','準時(11:00-13:00)','12:00'],
+  ['Sat Dec 30 1899 17:00:00 GMT+0805 (Taipei Standard Time)','準時(16:00-18:00)','17:00'],
+  [0.25,'','06:00'],[0.5,'','12:00'],[17/24,'','17:00'],
+  ['06:00:00','','06:00'],['收尾','','收尾']
+])assert.equal(H.normalize(raw,status),expected);
+const historical=[
+  {...normal,shift:'Sat Dec 30 1899 06:00:00 GMT+0805 (Taipei Standard Time)',timeStatus:'準時(05:00-07:00)'},
+  {...normal,shift:'Sat Dec 30 1899 12:00:00 GMT+0805 (Taipei Standard Time)',timeStatus:'準時(11:00-13:00)'},
+  {...normal,shift:'custom',timeStatus:''}
+];
+assert.equal(H.group(historical).get('2026-11-16').length,3);
+assert.equal(H.group(historical).get('2026-11-16')[0].shift,'06:00');
+assert(!H.summarize(historical,now).missing.some(x=>x.date==='2026-11-16'&&x.shift==='12:00'));
+console.log('PASS: legacy Sheets time values and assignment windows preserve all records');
