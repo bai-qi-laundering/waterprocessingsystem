@@ -1,0 +1,11 @@
+{
+  "id": "/waterprocessingsystem/",
+  "name": "百麒水處理巡檢",
+  "short_name": "水處理巡檢",
+  "start_url": "/waterprocessingsystem/index.html",
+  "scope": "/waterprocessingsystem/",
+  "display": "standalone",
+  "background_color": "#e0fbfc",
+  "theme_color": "#126b82",
+  "lang": "zh-TW"
+}

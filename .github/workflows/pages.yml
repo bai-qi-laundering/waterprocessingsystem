@@ -27,7 +27,7 @@ jobs:
       - name: Prepare website
         run: |
           mkdir _site
-          cp index.html history.html app.css config.js transport.js inspection.js history.js history-core.js .nojekyll _site/
+          cp index.html history.html app.css config.js transport.js inspection.js history.js history-core.js push.js OneSignalSDKWorker.js manifest.webmanifest .nojekyll _site/
       - uses: actions/upload-pages-artifact@v3
         with:
           path: _site

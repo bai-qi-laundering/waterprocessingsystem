@@ -10,6 +10,11 @@
   <script src="transport.js?v=20261120-4"></script>
   <script src="history-core.js?v=20261120-rules2"></script>
   <script src="history.js?v=20261120-rules2" defer></script>
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="水處理巡檢">
+<script src="push.js?v=1" defer></script>
+<script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
 </head>
 <body style="margin:0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif">
 <main class="history-shell">
@@ -22,7 +27,8 @@
     <div class="summary-card"><span>本週逆止閥清潔</span><strong id="valveCount">—</strong><small>本週紀錄 · 次</small></div>
   </section>
   <p id="weekRange" class="history-message">本週以週一至今日計算，尚未到期的時段不計入遺漏。</p>
-  <div id="connectionStatus" class="connection-status" role="status">正在連接巡檢資料…</div>
+  <div style="margin:12px 0;font-size:13px"><button id="enablePush" type="button" style="padding:12px;border:1px solid #98c1d9;border-radius:10px;background:white;color:#173d4e" disabled>開啟手機通知</button><p id="pushStatus" role="status">正在準備通知功能…</p></div>
+<div id="connectionStatus" class="connection-status" role="status">正在連接巡檢資料…</div>
   <div class="history-filters">
     <label>日期<input type="date" id="filterDate"></label>
     <label>時段<select id="filterShift"><option value="ALL">全部時段</option><option value="06:00">06:00</option><option value="12:00">12:00</option><option value="17:00">17:00</option><option value="收尾">收尾</option></select></label>
