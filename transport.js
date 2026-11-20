@@ -13,7 +13,7 @@
   }
   window.addEventListener("message",event => {
     const data=event.data;
-    if (!data || data.channel!==channel || !/^https:\/\/([a-z0-9-]+\.)?script\.googleusercontent\.com$/.test(event.origin)) return;
+    if (!data || data.channel!==channel || !/^https:\/\/(?:[a-z0-9-]+-)?script\.googleusercontent\.com$/.test(event.origin)) return;
     if(data.type==="water-ready" && !peer){
       peer=event.source;peerOrigin=event.origin;clearTimeout(connectTimer);
       status("已連接巡檢資料");readyResolve();return;
@@ -26,7 +26,7 @@
   const connectTimer=setTimeout(() => {
     const error=new Error("尚未連接巡檢資料。請確認 Apps Script 已更新 Code.gs 並部署新版本，再重新整理。");
     status(error.message,true);readyReject(error);
-  },25000);
+  },60000);
   function mount(){
     frame=document.createElement("iframe");frame.hidden=true;frame.title="巡檢資料連線";
     const url=new URL(window.WATER_CONFIG.backendUrl);
