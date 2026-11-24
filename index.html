@@ -924,6 +924,9 @@
       </div>
     </div>
 
+<div class="manual-valve-btn-wrap" id="manualMotorWrap"><button type="button" class="manual-valve-btn" onclick="openMotor()">手動加入：雙馬達逆洗（照片 / 影片）</button></div>
+<div class="card" id="motorCard" style="display:none"><div class="section-title">雙馬達逆洗 <button type="button" id="cancelMotor" class="cancel-manual-valve-btn" onclick="closeMotor()">取消關閉</button></div><p id="motorNotice">每兩天一次，僅收尾強制；至少上傳一個照片或影片。</p>
+<div class="valve-slot-card missing-slot" id="slotCard_motor"><span id="countBadge_motor">尚未上傳 (0)</span><label class="photo-upload-box"><input type="file" accept="image/*,video/*" multiple onchange="handleMultiMediaSelect(event,'motor')"><span class="upload-btn-text">上傳雙馬達逆洗照片／影片</span></label><div class="multi-media-grid" id="grid_motor"></div></div></div>
     <!-- 5. 巡檢人員手寫簽名 -->
     <div class="card">
       <div class="section-title">5. 巡檢人員簽名確認 *</div>
@@ -948,6 +951,7 @@
   };
 
   const valveMediaStore = {
+    motor: [],
     v1Before: [],
     v1After: [],
     v2Before: [],
@@ -969,6 +973,22 @@
     setInterval(updateTimeAndAutoShift, 5000);
     setupExitLockGuard();
   };
+
+
+  let motorManual=false,motorActive=false;
+  function motorDue(){
+    const days=Math.round((Date.parse(WaterHistory.clock().date+'T00:00:00+08:00')-Date.parse('2026-11-16T00:00:00+08:00'))/86400000);
+    return days>=0&&days%2===0&&assignedShift==='收尾';
+  }
+  function evaluateMotor(){
+    motorActive=motorManual||motorDue();
+    document.getElementById('motorCard').style.display=motorActive?'block':'none';
+    document.getElementById('manualMotorWrap').style.display=motorActive?'none':'block';
+    document.getElementById('cancelMotor').style.display=motorDue()?'none':'inline-block';
+    document.getElementById('motorNotice').textContent=motorDue()?'本日收尾需完成雙馬達逆洗，至少上傳一個照片或影片。':'手動雙馬達逆洗：至少上傳一個照片或影片。';
+  }
+  function openMotor(){motorManual=true;evaluateMotor();document.getElementById('motorCard').scrollIntoView({behavior:'smooth'});}
+  function closeMotor(){if(motorDue())return;motorManual=false;valveMediaStore.motor=[];renderValveMediaGrid('motor');evaluateMotor();}
 
   function setupExitLockGuard() {
     window.addEventListener("beforeunload", function (e) {
@@ -1042,6 +1062,7 @@
     }
 
     evaluateValveScheduleByStartDate();
+    evaluateMotor();
   }
 
   function evaluateValveScheduleByStartDate() {
@@ -1489,6 +1510,10 @@
       return;
     }
 
+    if(motorActive&&!valveMediaStore.motor.length){
+      statusMsg.className="status-msg error";statusMsg.textContent="請上傳雙馬達逆洗照片或影片後再送出。";
+      document.getElementById('motorCard').scrollIntoView({behavior:'smooth'});return;
+    }
     if (!hasSignature) {
       statusMsg.className = "status-msg error";
       statusMsg.textContent = "⚠️ 送出前請先在下方簽名欄完成手寫簽名！";
@@ -1530,6 +1555,13 @@
         }
       }
 
+      const motorUrls=[];
+      if(motorActive){
+        for(let i=0;i<valveMediaStore.motor.length;i++){
+          submitBtn.textContent='正在上傳雙馬達逆洗檔案 '+(i+1)+' / '+valveMediaStore.motor.length;
+          motorUrls.push(await uploadSingleValveFile('雙馬達逆洗',i,valveMediaStore.motor[i],assignedShift));
+        }
+      }
       submitBtn.textContent = "💧 正在寫入巡檢紀錄與簽名...";
 
       const remainingVal = document.getElementById("remainingAmount").value.trim();
@@ -1546,7 +1578,7 @@
         leakCheck: leakVal,
         pipeCheck: pipeVal,
         waterLevelCheck: waterVal,
-        notes: document.getElementById("notes").value.trim(),
+        notes: document.getElementById("notes").value.trim()+(motorActive?'\n【雙馬達逆洗紀錄】\n'+motorUrls.join('\n')+'\n【雙馬達逆洗結束】':''),
         abnormalPhotoBase64: hasAbnormal ? photoStore.abnormal : "",
         remainingAmount: remainingVal,
         pWaterAlert: pWaterStatus,
@@ -1567,6 +1599,7 @@
             isSubmittingDone = true;
             refreshLastInspection();
             isManuallyOpenedValve = false;
+            motorManual=false;
             statusMsg.className = "status-msg success";
             statusMsg.textContent = `✅ 巡檢紀錄、照片/影片與簽名已成功上傳！（日期：${res.dateStr} ${res.timeStr}）`;
             document.getElementById("inspectionForm").reset();

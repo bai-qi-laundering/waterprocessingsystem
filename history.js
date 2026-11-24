@@ -63,7 +63,7 @@
         const closingCovered=s==='收尾'&&(groups.get(day)||[]).some(r=>r.shift==='17:00');
         const late=H.expired(day,s)&&!closingCovered;
         const text=complete?(rows.length>1?rows.length+' 筆紀錄 · 點開查看':'已巡檢 · 點開查看'):closingCovered?'17:00 已巡檢，當日不需收尾':late?'已過截止時間，尚無紀錄':'尚無紀錄';
-        return '<details class="slot '+(complete?'complete':closingCovered?'covered':late?'overdue':'')+'" data-day="'+day+'" data-shift="'+escape(s)+'"><summary><span><span class="slot-name">'+escape(s)+'</span><span class="slot-sub">'+text+'</span>'+(rows.some(r=>r.doValveClean==='是')?'<span class="valve-note">逆止閥清潔紀錄</span>':'')+'</span><span class="slot-check" aria-label="'+(complete?'已有巡檢紀錄':'尚無巡檢紀錄')+'">'+(complete?'✓':'')+'</span></summary><div class="slot-body"></div></details>';
+        return '<details class="slot '+(complete?'complete':closingCovered?'covered':late?'overdue':'')+'" data-day="'+day+'" data-shift="'+escape(s)+'"><summary><span><span class="slot-name">'+escape(s)+'</span><span class="slot-sub">'+text+'</span>'+(rows.some(r=>String(r.notes||'').includes('【雙馬達逆洗紀錄】'))?'<span class="valve-note">雙馬達逆洗紀錄</span>':'')+(rows.some(r=>r.doValveClean==='是')?'<span class="valve-note">逆止閥清潔紀錄</span>':'')+'</span><span class="slot-check" aria-label="'+(complete?'已有巡檢紀錄':'尚無巡檢紀錄')+'">'+(complete?'✓':'')+'</span></summary><div class="slot-body"></div></details>';
       }).join('');
       return '<section class="day-card"><h2><time datetime="'+day+'">'+day.slice(0,4)+' / '+escape(label)+'</time></h2>'+slots+'</section>';
     }).join('')||'<div class="empty-state">目前沒有符合條件的巡檢紀錄。</div>';
@@ -84,8 +84,9 @@
   }
   function renderRecord(r) {
     const fields=[['馬達異音',r.noise],['漏水檢查',r.leak],['加藥管膨脹',r.pipe],['桶內水位消耗',r.waterLevel],['加藥劑流數',r.chemicalFlowRate],['藥劑剩餘量',r.remainingAmount],['補 P 水警示',r.pWaterAlert],['補 P 水確認',r.pWaterRefilled||'未補水']];
-    const media=[['藥劑剩餘量',r.remainingPhoto],['異常部位',r.abnormalPhoto],['逆止閥1 · 清潔前',r.v1BeforePhoto],['逆止閥1 · 清潔後',r.v1AfterPhoto],['逆止閥2 · 清潔前',r.v2BeforePhoto],['逆止閥2 · 清潔後',r.v2AfterPhoto],['人員簽名',r.signaturePhoto]].flatMap(([label,raw])=>H.media(raw,label));
-    return '<article class="inspection-detail"><h3>巡檢時間 '+escape(r.time)+' · '+escape(r.timeStatus)+'</h3><dl class="record-fields">'+fields.map(([label,value])=>'<div class="'+(/異常|需補/.test(value||'')?'bad':'')+'"><dt>'+label+'</dt><dd>'+escape(value||'未填寫')+'</dd></div>').join('')+'</dl>'+(r.notes?'<p class="record-note">備註：'+escape(r.notes)+'</p>':'')+'<div class="media-grid">'+media.map(item=>{
+    const motorBlock=String(r.notes||'').match(/【雙馬達逆洗紀錄】\s*([\s\S]*?)【雙馬達逆洗結束】/);
+    const media=[['雙馬達逆洗',motorBlock?motorBlock[1]:''],['藥劑剩餘量',r.remainingPhoto],['異常部位',r.abnormalPhoto],['逆止閥1 · 清潔前',r.v1BeforePhoto],['逆止閥1 · 清潔後',r.v1AfterPhoto],['逆止閥2 · 清潔前',r.v2BeforePhoto],['逆止閥2 · 清潔後',r.v2AfterPhoto],['人員簽名',r.signaturePhoto]].flatMap(([label,raw])=>H.media(raw,label));
+    return '<article class="inspection-detail"><h3>巡檢時間 '+escape(r.time)+' · '+escape(r.timeStatus)+'</h3><dl class="record-fields">'+fields.map(([label,value])=>'<div class="'+(/異常|需補/.test(value||'')?'bad':'')+'"><dt>'+label+'</dt><dd>'+escape(value||'未填寫')+'</dd></div>').join('')+'</dl>'+(r.notes?'<p class="record-note">備註：'+escape(String(r.notes).replace(/【雙馬達逆洗紀錄】[\s\S]*?【雙馬達逆洗結束】/g,'雙馬達逆洗已完成（照片／影片見下方）'))+'</p>':'')+'<div class="media-grid">'+media.map(item=>{
       const index=mediaItems.push(item)-1;
       return '<button type="button" class="media-button" data-media="'+index+'" aria-label="'+escape((item.isVideo?'播放影片：':'放大照片：')+item.label)+'"><img loading="lazy" decoding="async" src="'+escape(item.thumbnail)+'" alt="'+escape(item.label)+'">'+(item.isVideo?'<span class="play-badge" aria-hidden="true">▶</span>':'')+'<span>'+escape(item.label)+(item.isVideo?' · 影片':'')+'</span></button>';
     }).join('')+'</div></article>';
